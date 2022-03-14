@@ -1,0 +1,23 @@
+vm_cpus = 2
+vm_memory = 2048
+vm_name = "centos-wintest"
+vm_forwarded_port = 8080
+
+$script = <<-'SCRIPT'
+ip address add 172.23.240.10/20 dev eth0
+ip route add default via 172.23.240.1 dev eth0
+echo "nameserver 192.168.1.1" > /etc/resolv.conf
+SCRIPT
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "hashicorp/bionic64"
+  config.vm.provider "hyperv"
+  config.vm.network "public_network", bridge: "WSL"
+  config.vm.synced_folder ".", "/vagrant",disabled: true
+  config.vm.provider "hyperv" do |h|
+    h.enable_virtualization_extensions = true
+    h.linked_clone = true
+  end
+  config.vm.provision "shell", inline: $script
+end
+  

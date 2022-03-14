@@ -1,0 +1,9 @@
+# Probar el INventario con Ad-hoc commands
+# 
+Ansible [pattern] -m module -a "opciones" -i inventario
+
+ansible  all -m ping -i inventories/test.yaml  
+# Probar ping con password
+ansible  all -m ping -i inventories/test.yaml   
+
+ansible all -m shell -a uptime -i inventories/test.yaml

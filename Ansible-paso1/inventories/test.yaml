@@ -1,0 +1,10 @@
+all:  
+  hosts:
+    172.23.240.10
+  vars:
+    ansible_connection: ssh
+    ansible_ssh_user: vagrant
+    ansible_ssh_pass: vagrant
+    ansible_user: vagrant
+    ansible_pass: vagrant
+
