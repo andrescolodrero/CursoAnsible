@@ -12,7 +12,7 @@ Ethernet adapter vEthernet (WSL):
    Subnet Mask . . . . . . . . . . . : 255.255.240.0
    Default Gateway . . . . . . . . . :
 
-# Copiar "IPv4 Adddress"
+### Copiar "IPv4 Adddress"
 Editar el fichero "/vagrant/Vagrantfile
 
 $script = <<-'SCRIPT'
