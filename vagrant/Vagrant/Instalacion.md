@@ -1,41 +1,49 @@
-## Prácticas de Ansible
+# Prácticas de Ansible
 ## Prerequisitos: Vagrant o Maquina Virtual UBUNTU en HYperV
-#  Desinstalar CodeReadyContainer o DockerDesktop para liberar memoria y espacio.
-# Maquina virtual Ubuntu
-1. Descargar Ubuntu Server ISO: https://ubuntu.com/download/server
-2. Powershell como admin: Get-NetIPInterface | where {$_.InterfaceAlias -eq 'vEthernet (WSL)' -or $_.InterfaceAlias -eq 'vEthernet (K8s-Switch)'} | Set-NetIPInterface -Forwarding Enabled
+# Preinstalación
+Para que WSL puede comunicar con maquinas virtuales creadas con Vagrant, todas las maquinas deben de ester ne el mismo virtual siwtch:
 
-3. Crear máquina virtual con HyperV
-3.1. Seleccionar "New -> Virtual Machine". Requisitos:
-- Memory: 2GB
-- VirtualSwitch: Default Switch
-- Disco: 20gb
-- Installation: ISO file (importar el iso descargado previamente)
-- Si falla reboot, desmontar el CD de la máquina.
+powershell: ip config
+Ethernet adapter vEthernet (WSL):
 
-4. Proceder a Instalación básica de una maquina Linux.
-NOTA: Usar configuración básica. No hace falta esperar para "snap" updates.
-NOTA: recordar usuario.
+   Connection-specific DNS Suffix  . :
+   Link-local IPv6 Address . . . . . : fe80::4962:6505:7f4e:9b36%47
+   IPv4 Address. . . . . . . . . . . : 192.168.80.1
+   Subnet Mask . . . . . . . . . . . : 255.255.240.0
+   Default Gateway . . . . . . . . . :
+
+# Copiar "IPv4 Adddress"
+Editar el fichero "/vagrant/Vagrantfile
+
+$script = <<-'SCRIPT'
+ip address add (ip de la nueva maquina)/20 dev eth0
+ip route add default via (ipv4 address de wsl) dev eth0
+echo "nameserver 192.168.1.1" > /etc/resolv.conf
+SCRIPT
 
 
 # Vagrant 
-# Habailitar port forwading: (como admin)
-Get-NetIPInterface | where {$_.InterfaceAlias -eq 'vEthernet (WSL)' -or $_.InterfaceAlias -eq 'vEthernet (K8s-Switch)'} | Set-NetIPInterface -Forwarding Enable
-
 1. Desinstalar CodeReadyContainer o DockerDesktop para liberar memoria y espacio.
 2. Instalar Vagrant: https://www.vagrantup.com/downloads
-3. Descargar o ejecutar como admin "choco install vagrant"
+3. Descargar ejecutable o ejecutar como admin "choco install vagrant"
 4. Crear una carpeta "vagrant": mkdir c:\vagrant
 4. Reiniciar ordenador
 5. Crear una nueva variable de systema "VAGRANT_HOME" = "c:\vagrant"
-6. Probar la instalacion: /sesiones/Ansible/Vagrant
+6. Probar la instalacion: 
+   cd /Vagrant/
+   vagrant up -> (como Administrador)
+   
+ una vex terminada la instalaci´pn, probar con:
+ vagrant ssh
+ 
+Test: Desde WSL probar "ping ip"  o "ssh vagrant@ip"
 
 # Instalar Ansible en nuestra maquina.
 Ansible solo se ejecuta en linux, asi que tendremos que editar y ejecutar comandos desde WSL2
 
 1. Installar en Visual Studio Code: "Remote -WSL"
 2. Reiniciar Visual Studio Code
-3. Abrir un Terminal de Ubuntu
+3. Abrir un Terminal de Ubuntu WSL
 4. Apt update
-5. apt 
+5. apt install ansible
 
