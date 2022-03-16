@@ -1,0 +1,19 @@
+- name: Imprimir algo
+  debug:
+    msg: 
+      - "hostname {{ inventory_hostname }}"
+      -  "os {{ ansible_os_family }}"
+
+  
+- name: Add users
+  user:
+    name: "{{ item }}"
+    state: present 
+    shell: /bin/bash
+    groups: sudo
+    append: yes
+  loop: 
+    - "andres"
+    - "paco"
+    - "fernando"
+

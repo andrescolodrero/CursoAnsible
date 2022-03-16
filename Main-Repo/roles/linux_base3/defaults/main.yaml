@@ -1,0 +1,18 @@
+---
+packages:
+  Debian:
+  - curl
+  - unzip
+  - git
+  - net-tools
+  - pip
+  RedHat:
+  - curl
+  - unzip
+  - git
+  - net-tools
+  - epel-release
+  - bindutils
+
+ 
+

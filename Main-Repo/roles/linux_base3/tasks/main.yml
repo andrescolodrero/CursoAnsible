@@ -1,0 +1,59 @@
+- name: Imprimir algo
+  debug:
+    msg: 
+      - "hostname {{ inventory_hostname }}"
+      -  "os {{ ansible_os_family }}"
+
+  
+- name: Add users
+  user:
+    name: "{{ item }}"
+    state: present 
+    shell: /bin/bash
+    groups: sudo
+    append: yes
+  loop: 
+    - "andres"
+    - "paco"
+    - "fernando"
+
+- name: Instalar dependencias básicas
+  package:
+    name: "{{ packages[ansible_os_family] }}"
+    state: latest
+
+- name: Acceso puerto 80
+  ufw:
+    rule: allow
+    port: '80'
+    proto: tcp
+
+- name: Instalar nginx
+  apt:
+    name: nginx
+    state: latest
+
+- name: start nginx
+  service:
+    name: nginx
+    state: started
+
+- name: Copy Website to Server
+  copy:
+    src: ../files/html_demo_site-main
+    dest: "/var/www/html"
+    mode: preserve
+
+- name: Apply Nginx template
+  template:
+    src: ../templates/nginx.conf.j2
+    dest: /etc/nginx/sites-available/default
+  notify: Restart Nginx
+
+- name: Enable new site
+  file:
+    src: /etc/nginx/sites-available/default
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+  notify: Restart Nginx
+
